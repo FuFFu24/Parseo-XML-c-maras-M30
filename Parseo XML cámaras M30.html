@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Parseo XML cámaras M30</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+function insertarCamaras()
+	{
+	var objeto_peticion=new XMLHttpRequest();
+	objeto_peticion.onreadystatechange=function()
+		{
+			if (objeto_peticion.status==200 && objeto_peticion.readyState==4)
+			{
+				//TODO
+				pintarTabla(objeto_peticion.responseXML);
+
+			}
+		}
+objeto_peticion.open("GET", "Parseo XML cámaras M30.xml");
+objeto_peticion.send();
+		//readyState
+		//status
+
+		//responseText
+		//responseXML
+	}
+	function pintarTabla(xml)
+	{
+		//Suponemos que cada libro tiene
+		//solo un autor y solo un título
+		var arr_Latitud=xml.getElementsByTagName("Latitud");
+		var arr_Longitud=xml.getElementsByTagName("Longitud");
+        var arr_URL=xml.getElementsByTagName("URL");
+		var obj_tabla=document.createElement("table");
+		for(i=0; i<arr_Latitud.length;i++ )
+		{
+			var objeto_fila=document.createElement("tr");
+			var objeto_celda_Latitud=document.createElement("td");
+			var objeto_celda_Longitud=document.createElement("td");
+            var objeto_celda_URL=document.createElement("td");
+            var objeto_img_URL=document.createElement("img");
+			var Latitud=arr_Latitud[i].childNodes[0].nodeValue;
+			var Longitud=arr_Longitud[i].childNodes[0].nodeValue;
+            var URL=arr_URL[i].childNodes[0].nodeValue;
+        objeto_celda_Latitud.innerHTML=Latitud;
+        objeto_celda_Longitud.innerHTML=Longitud;
+        objeto_img_URL.src="https://"+URL;
+			objeto_fila.appendChild(objeto_celda_Latitud);
+			objeto_fila.appendChild(objeto_celda_Longitud);
+            objeto_fila.appendChild(objeto_celda_URL);
+            objeto_celda_URL.appendChild(objeto_img_URL);
+			obj_tabla.appendChild(objeto_fila);
+			document.getElementById("contenedor_tabla").appendChild(obj_tabla);
+}
+}
+</script>
+
+</head>
+<body onload="insertarCamaras();">
+	<div id="contenedor_tabla"></div>
+</body>
+</html>
